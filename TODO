@@ -1,0 +1,21 @@
+mkhexgrid TODO list:
+
+* Grid thickness must be 1px with antialiased PNG output due to a limitation
+  in libgd, which we use for PNG drawing. In order to fix this, we need
+  either to write a custom routine for drawing thick antialiased lines or
+  get such a routine added to libgd.
+
+* It would be nice if common paper sizes (letter, legal, A4, D) could be
+  given for the image size for PostScript output.
+
+* Add a center thickness option for cross centers.
+
+* PDF output.
+
+* Do some other check for GDFONTPATH on Windows. Fonts are not always in
+  C:\Windows\Fonts.
+
+* Include tutorial in package. Expand tutorial.
+
+* Include Japanese translation of manual in package.
+

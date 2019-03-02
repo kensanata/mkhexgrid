@@ -1,0 +1,11 @@
+mkhexgrid 0.1.1, 10 January 2007
+
+* Now builds properly on Mac OS X.
+* "%c" and "%r" coordinate formats are now rendered properly.
+* Coordinate bearing now defaults to 90 degrees instead of 0. 
+* Various corrections in the documentation.
+* Thanks to Steve Huff and Masaki Nakazawa for finding the bugs corrected
+  in this release.
+
+mkhexgrid 0.1.0, 6 August 2006
+* Initial release.

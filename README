@@ -1,0 +1,78 @@
+********************************************************************************
+*                                                                              *
+*                                   mkhexgrid                                  *
+*                                 version 0.1.1                                *
+*                                 Joel Uckelman                                *
+*                                10 January 2007                               *
+*                                                                              *
+********************************************************************************
+
+mkhexgrid is a small, command-line program which generates hex grids of the
+sort used for strategy games.
+
+USAGE
+
+For usage information, see the included documentation, either mkhexgrid.html
+(all platforms) or the man page (unix only).
+
+INSTALLATION
+
+Windows:
+
+Windows users are recommended to use the pre-built version of mkhexgrid.
+No installation is necessary beyond unpacking the ZIP archive.
+
+Unix (including MacOS X):
+
+Binary and source RPMs are provided for users of RPM-based Linux
+distributions. FreeBSD users may build mkhexgrid using the ports system.
+MaxOS X users may build mkhexgrid using Fink (see
+http://fink.sourceforge.net). Other Unix users are recommended to build
+mkhexgrid from source. This should be a near-trivial process in most cases.
+See the next section, Building From Source.
+
+Building From Source:
+
+1. mkhexgrid has been successfully built using GCC on Unix and the
+MinGW port of GCC on Windows. mkhexgrid uses GNU getopt, so building
+mkhexgrid using any compiler which lacks a compatible getopt
+implementation will involve modifying the code somewhat.
+
+2. mkhexgrid requires the Boost and GD libraries. Boost is available
+from http://www.boost.org, and does not need to be built itself, as
+mkhexgrid relies only on headers from Boost. GD is available from
+http://www.libgd.org. mkhexgrid uses GD as the graphics drawing library
+for PNG output. Many Linux and BSD systems will already have Boost
+and GD installed.
+
+3. Build mkhexgrid.
+
+On Unix:
+
+   make
+   make install
+
+On Windows:
+
+   make -f Makefile.win32
+
+You must check that the paths defined in the Makefile are correct for
+your compiler and libraries, and also that you have getopt.h. (MinGW
+does, MSVC++ does not.)
+
+ANNOUNCEMENTS
+
+New versions of mkhexgrid are announced on the
+   
+   mkhexgrid-announce@nomic.net
+
+mailing list. To subscribe, send a message to
+   
+   mkhexgrid-announce-request@nomic.net
+
+with the word 'subscribe' in the message body.
+
+BUGS AND PROBLEMS
+
+Please report bugs, problems, and suggestions to mkhexgrid-bugs@nomic.net.
+

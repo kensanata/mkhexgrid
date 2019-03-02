@@ -1,0 +1,54 @@
+MINGW=/home/uckelman/projects/board/build/mingw
+LIBGD=/home/uckelman/projects/mkhexgrid/gdwin32
+BOOST=/home/uckelman/projects/board/build/boost_1_33_1
+FREETYPE=/home/uckelman/projects/mkhexgrid/freetype-2.1.10/bin
+
+VERSION=$(shell cat VERSION)
+
+CC=$(MINGW)/bin/i686-mingw32-g++
+CXX=$(MINGW)/bin/i686-mingw32-g++
+CPPFLAGS=-c -g -O2 -W -Wall -I$(LIBGD) -I$(BOOST) -DVERSION='"$(VERSION)"'
+LDFLAGS=-lm -lstdc++ -s 
+
+DISTDIR=mkhexgrid-$(VERSION)
+
+TXTDOCS=AUTHORS \
+        COPYING \
+        HISTORY \
+        README \
+        TODO \
+        VERSION
+
+DOCS=$(TXTDOCS) \
+     doc/mkhexgrid.html
+
+LICENSES=$(LIBGD)/gd-license.txt \
+         $(LIBGD)/libpng-license.txt \
+         $(LIBGD)/libfreetype-license.txt \
+         $(LIBGD)/libjpeg-license.txt \
+         $(LIBGD)/zlib-license.txt
+
+FILES=mkhexgrid.exe \
+      $(LIBGD)/bgd.dll \
+      $(FREETYPE)/freetype6.dll \
+      $(DOCS) \
+      $(LICENSES)
+
+.PHONY: all dist clean
+
+all: mkhexgrid.exe
+
+mkhexgrid.exe: mkhexgrid.o grid.o png.o ps.o svg.o $(LIBGD)/libbgd.a
+	$(CC) $(LDFLAGS) $(LDLIBS) -o $@ $^
+
+dist: mkhexgrid.exe
+	mkdir -p $(DISTDIR)
+	cp $(FILES) $(DISTDIR)
+	cd $(DISTDIR)
+	unix2dos $(TXTDOCS)
+	cd ..
+	zip -9r mkhexgrid-$(VERSION).windows.zip $(DISTDIR)
+	rm -rf $(DISTDIR)
+
+clean:
+	rm -rf mkhexgrid.exe *.o mkhexgrid-$(VERSION).zip $(DISTDIR)

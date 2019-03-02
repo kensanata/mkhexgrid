@@ -1,0 +1,278 @@
+.\" Process this file with
+.\" groff -man -Tascii mkhexgrid.1
+.\"
+.TH MKHEXGRID 1 "January 2007" "mkhexgrid 0.1.1"
+
+.SH NAME
+mkhexgrid \- make hexagonal grids
+
+.SH SYNOPSIS
+.B mkhexgrid
+.RI [ OPTION "]... [" specfile "[ " outfile ]]
+
+.SH DESCRIPTION
+mkhexgrid creates hexagonal grids in PNG, PostScript, and Scalable Vector
+Graphics (SVG) formats, optionally labeled with coordinates and hex centers.
+.I specfile
+is the name of the file containing hex grid parameters and
+.I outfile
+is the name of the file into which output is written. If
+.I outfile
+is not specified, output will be written to standard output. If
+.I specfile
+is not specified, grid parameters may be read from standard input.
+
+.SH OPTIONS
+.SS Option Syntax
+
+mkhexgrid uses GNU getopt to process command-line arguments. Each option may be given as
+.B --option-name
+for options which take no arguments, or as
+\fB--option-name\fR=\fIargument\fR
+for options which take arguments.
+
+Lengths and sizes are in pixels for PNG and SVG output and are given without specifying the unit. Lengths and sizes may be specified in inches, millimeters, or points (as in, mm, or pt) for PostScript output, and default to points when no unit is given. (1in = 72pt = 25.4mm) Lengths and sizes for PNG output must be integers, with the exception of coordinate size, which may be a decimal. All angles are given as decimals in degrees.
+
+Colors are given in hexadecimal RRGGBB format for PNG and SVG output (e.g., FFFFFF is white, 8C6AC6 is a shade of purple). Colors are given as R,G,B triples for PostScript output, where R, G, and B are values in the interval [0,1] (e.g., 1,0,0 is red, and 0.8,0.8,0.8 is a light grey).
+
+Opacity ranges over integers in [0,127] for PNG output, reals in [0,1] for SVG output, and is ignored for PostScript output.
+
+.SS Output Options
+.TP
+.B --antialias
+Turn on antialiased output. This option has effect for PNG output only, since PostScript and SVG are antialiased by nature.
+
+.TP
+\fB-o\fR \fIfilename\fR, \fB--outfile\fR=\fIfilename\fR
+Write output to the file called \fIfilename\fR. The default is to print to standard output if no output filename is given or if a dash (-) is given as the filename. To write to a file named -, give ./- as the filename.
+
+.TP
+\fB--output\fR=\fItype\fR
+Set the output type to \fItype\fR. Permissible values are 'png' for PNGs, 'ps' for PostScript, and 'svg' for SVG.
+
+.SS Grid Options
+Not all of hex width, hex height, hex side, image width, image height, rows, and columns need be given in order to draw a grid. A grid will be drawn so long as enough of these are specified so that the ones omitted may be calculated.
+
+.TP
+\fB--hex-width\fR=\fIlength\fR
+Set the width of hexes to \fIlength\fR.
+
+.TP
+\fB--hex-height\fR=\fIlength\fR
+Set the height of hexes to \fIlength\fR.
+
+.TP
+\fB--hex-side\fR=\fIlength\fR
+Set the length of hex sides to \fIlength\fR.
+
+.TP
+\fB--image-width\fR=\fIlength\fR
+Set the width of the image to \fIlength\fR.
+
+.TP
+\fB--image-height\fR=\fIlength\fR
+Set the height of the image to \fIlength\fR.
+
+.TP
+\fB--image-margin\fR=\fIm\fR, \fB--image-margin\fR=\fIt,r,b,l\fR
+The first form sets all four margins to \fIm\fR. The second form proceeds clockwise to set the top, right, bottom, and left margins individually to \fIt\fR, \fIr\fR, \fIb\fR, and \fIl\fR, respectively.
+
+.TP
+\fB--centered\fR
+Center grid with respect to the image boundaries less the image margins. Useful when rows and columns are calculated rather than specified.
+
+.TP
+\fB--rows\fR=\fIn\fR
+Draw \fIn\fR rows of hexes. \fIn\fR must be a positive integer.
+
+.TP
+\fB--columns\fR=\fIn\fR
+Draw \fIn\fR columns of hexes. \fIn\fR must be a positive integer.
+
+.TP
+\fB--grid-color\fR=\fIcolor\fR
+Set the color of the grid lines. Default is 50% grey: 808080 for PNG and SVG output, 0.5,0.5,0.5 for PostScript output.
+
+.TP
+\fB--grid-opacity\fR=\fIopacity\fR
+Set the opacity of the grid lines. Defaults to fully opaque: 0 for PNG output, 1 for SVG output, and is ignored for PostScript output.
+
+.TP
+\fB--grid-thickness\fR=\fIsize\fR
+Set the thickness of the grid lines to \fIsize\fR. Defaults to 1px for PNG and SVG output, and 1pt for PostScript. This option is ignored for antialiased PNG output, due to limitations of the underlying GD drawing library.
+
+.TP
+\fB--grid-grain\fR=\fIgrain\fR
+Set the grain of the hex grid. Permissible values are 'h' for horizontal and 'v' for vertical. With horizontal grain, the rows are straight and the columns wavy; vertical grain is the opposite, and is the default.
+
+.TP
+\fB--grid-start\fR=\fIstart\fR
+If the grain is vertical, set whether the first column starts in or out. If the grain is horizontal, set whether the first row starts in or out. Permissible values are 'i' for in, or 'o' for out. Which column or row is the first is fixed by the coordinate origin.
+
+.SS Coordinate Options
+These options affect the appearance and placement of coordinates within hexes.
+
+.TP
+\fB--coord-color\fR=\fIcolor\fR
+Set the color of the hex coordinates. Default is 50% grey: 808080 for PNG and SVG output, 0.5,0.5,0.5 for PostScript output.
+
+
+.TP
+\fB--coord-opacity\fR=\fIopacity\fR
+Set the opacity of the hex coordinates. Defaults to fully opaque: 0 for PNG output, 1 for SVG output, and is ignored for PostScript output.
+
+.TP
+\fB--coord-format\fR=\fIformat\fR
+Set the format of the hex coordinates. The format string syntax is similar to that used by the
+.BR printf (3)
+function in C. The following special markers cause values to be substituted into the format string where they appear:
+
+    \fB%c\fR
+        Prints the hex column as a number.
+    \fB%r\fR
+        Prints the hex row as a number.
+    \fB%C\fR
+        Prints the hex column as a capital letter.
+    \fB%R\fR
+        Prints the hex row as a capital letter.
+
+The field width can be specified for numeric types by inserting a number between the % and the format letter; numeric types can be zero-padded by prepending a 0 to the field width. The alphabetic formats count AB as the successor of AA by default; tally-like counting where BB is the successor of AA can be specified by inserting a t before the format letter. A percent sign may be specified by %%. The default format is %02c%02r. Coordinates may be disabled by giving an empty string ("") as the format.
+
+.TP
+\fB--coord-font\fR=\fIfont\fR
+Set the font for coordinate text.
+
+.TP
+\fB--coord-size\fR=\fIsize\fR
+Set the size, in points, of the coordinate text. Defaults to 8px for SVG, 8pt for PNG and PostScript. This is the only length or size which is measured in points for PNG output.
+
+.TP
+\fB--coord-bearing\fR=\fItheta\fR
+Place coordinates at \fItheta\fR degrees counterclockwise from the hex center. The default bearing is 90 degrees, vertically above the hex center.
+
+.TP
+\fB--coord-distance\fR=\fIlength\fR
+Place coordinates \fIlength\fR away from the hex center. Defaults to 0.
+
+.TP
+\fB--coord-tilt\fR=\fItheta\fR
+Tilt coordinates at \fItheta\fR degrees counterclockwise from the horizontal. The default tilt is 0 degrees, which yields horizontal text.
+
+.TP
+\fB--coord-column-skip\fR=\fIn\fR
+Print coordinates only for columns divisible by \fIn\fR. The default is 1, which prints coordinates for all columns.
+
+.TP
+\fB--coord-row-skip\fR=\fIn\fR
+Print coordinates only for rows divisible by \fIn\fR. The default is 1, which prints coordinates for all rows.
+
+.TP
+\fB--coord-column-start\fR=\fIn\fR
+Number columns starting from \fIn\fR. The default is 1.
+
+.TP
+\fB--coord-row-start\fR=\fIn\fR
+Number rows starting from \fIn\fR. The default is 1.
+
+.TP
+\fB--coord-origin\fR=\fIcorner\fR
+Set location of coordinate origin. Permissible locations are 'ul' for upper left, 'ur' for upper right, 'll' for lower left, and 'lr' for lower right. Upper left is the default.
+
+.SS Hex Center Options
+
+.TP
+
+.TP
+\fBcenter-style\fR=\fIstyle\fR
+Set style of hex centers to \fIstyle\fR. Permissible styles are 'n' for none, 'd' for dots, and 'c' for crosses.
+
+.TP
+\fBcenter-color\fR=\fIcolor\fR
+Set the color of hex centers. Default is 50% grey: 808080 for PNG and SVG output, 0.5,0.5,0.5 for PostScript output.
+
+.TP
+\fBcenter-opacity\fR=\fIopacity\fR
+Set the opacity of hex centers. Defaults to fully opaque: 0 for PNG output, 1 for SVG output, and is ignored for PostScript output.
+
+.TP
+\fBcenter-size\fR=\fIsize\fR
+Set the size of hex centers to \fIsize\fR. Defaults to 3px for PNG and SVG, 3pt for PostScript. Center size must be an integer for PNG output.
+
+.SS Background Options
+
+.TP
+\fB--bg-color\fR=\fIcolor\fR
+Set the background color. Defaults to FFFFFF for PNG output, and to none for SVG and PostScript output.
+
+.TP
+\fB--bg-opacity\fR=\fIopacity\fR
+Set the background opacity. Default is fully opaque: 0 for PNG output, 1 for SVG output, and is ignored for PostScript output.
+
+.TP
+\fB--matte\fR
+Prevent the background from extending into the image margins.
+
+.SS Miscellaneous Options
+
+.TP
+\fB--\fR
+Terminates the list of options. Arguments which appear after a \fB--\fR will not be interpreted as options. This is useful if you want to read a specfile the name of which begins with two dashes.
+
+.TP
+\fB--help\fR
+Display help and exit.
+
+.TP
+\fB--version\fR
+Display version information and exit.
+
+.SS Specfile Syntax
+
+Due to the large number of options which may be necessary to generate a single hex grid, users may also specify hex grid parameters in a specfile which can be read from standard input or named as the first non-option argument on the command line. A specfile contains =-separated option/value pairs, one pair per line. Comments may be preceded by a #, either following an option/value pair or on lines by themselves. Values containing spaces must be double-quoted. Double quotation marks may be included in quoted values by preceding them with a backslash. Options which require no value on the command line must be given a dummy value in a specfile. Options given on the command line override options given in a specfile.
+
+Example:
+
+   # specfile example
+   output = png
+   hex-side = 30     # this is an end-of-line comment
+   coord-format = "%C\\" %02r"
+   antialias = true  # 'true' is a dummy value 
+
+Here, the coordinate format will produce coordinates like A" 01, which isn't something anyone is likely to want, but it illustrates how to include spaces and quotation marks in a quoted value.
+
+.SH EXAMPLES
+
+Fill a 22"x34" sheet with 0.5" hexes, horizontal grain:
+
+.RS 4
+mkhexgrid --output=ps --image-width=34in --image-height=22in --hex-side=0.5in --coord-bearing=0 --coord-dist=0.3in --coord-size=8 --grid-thickness=1 --coord-font=Helvetica --grid-grain=h --grid-start=o --coord-tilt=-90 --centered -o test.ps
+
+.SH AVAILABILITY
+
+mkhexgrid is available from 
+
+         http://www.nomic.net/~uckelman/mkhexgrid.
+
+New releases of mkhexgrid are announced on the
+      
+         mkhexgrid-announce@nomic.net
+
+mailing list. To join, send a message to
+
+         mkhexgrid-announce-request@nomic.net
+
+with the word \fIsubscribe\fR in the message body.
+
+.SH AUTHOR
+
+Written by Joel Uckelman <uckelman@nomic.net>.
+ 
+.SH BUGS
+
+Please report bugs to <mkhexgrid-bugs@nomic.net>.
+
+.SH COPYRIGHT
+
+Copyright \(co 2006, 2007 Joel Uckelman.
+
+This is free software. You may redistribute copies of it under the terms of the GNU General Public License. There is NO WARRANTY, to the extent permitted by law.

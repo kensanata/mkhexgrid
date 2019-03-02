@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+   <title>mkhexgrid 0.1.1</title>
+   <style type="text/css">
+      body   { margin-left: 10%; margin-right: 10%; }
+      dt.b   { font-weight: bold; }
+      pre    { margin-left: 4em; margin-right: 4em; }
+   </style>
+</head>
+<body>
+<h1>mkhexgrid 0.1.1</h1>
+
+<h2>NAME</h2>
+<p>mkhexgrid &mdash; make hexagonal grids</p>
+
+<h2>SYNOPSIS</h2>
+<p>mkhexgrid [<em>option</em>]... [<em>specfile</em> [<em>outfile</em>]]</p>
+
+<h2>DESCRIPTION</h2>
+<p>mkhexgrid creates hexagonal grids in PNG, PostScript, and Scalable Vector Graphics (SVG) formats, optionally labeled with coordinates and hex centers. <em>specfile</em> is the name of the file containing hex grid parameters and <em>outfile</em> is the name of the file into which output is written. If <em>outfile</em> is not specified, output will be written to standard output. If <em>specfile</em> is not specified, grid parameters may be read from standard input.</p>
+
+<h2>OPTIONS</h2>
+<h3>Option Syntax</h3>
+<p>mkhexgrid uses GNU getopt to process command-line arguments. Each option may be given as <code>--option-name</code> for options which take no arguments, or as <code>--option-name=argument</code> for options which take arguments.</p>
+
+<p>Lengths and sizes are in pixels for PNG and SVG output and are given without specifying the unit. Lengths and sizes may be specified in inches, millimeters, or points (as <code>in</code>, <code>mm</code>, or <code>pt</code>) for PostScript output, and default to points when no unit is given. (1in = 72pt = 25.4mm) Lengths and sizes for PNG output must be integers, with the exception of coordinate size, which may be a decimal. All angles are given as decimals in degrees.</p>
+
+<p>Colors are given in hexadecimal RRGGBB format for PNG and SVG output (e.g., <code>FFFFFF</code> is white, <code>8C6AC6</code> is a shade of purple). Colors are given as R,G,B triples for PostScript output, where R, G, and B are values in the interval [0,1] (e.g., <code>1,0,0</code> is red, and <code>0.8,0.8,0.8</code> is a light grey).</p>
+
+<p>Opacity ranges over integers in [0,127] for PNG output, reals in [0,1] for SVG output, and is ignored for PostScript output.</p>
+
+<h3>Output Options</h3>
+<dl>
+   <dt><b>--antialias</b></dt>
+      <dd>Turn on antialiased output. This option has effect for PNG output only, since PostScript and SVG are antialiased by nature.</dd>
+   <dt><b>-o</b> <em>filename</em>, <b>--outfile</b>=<em>filename</em></dt>
+      <dd>Write output to the file called <em>filename</em>. The default is to print to standard output if no output filename is given or if a dash (<code>-</code>) is given as the filename. To write to a file named <code>-</code>, give <code>./-</code> as the filename.</dd>
+   <dt><b>--output</b>=<em>type</em></dt>
+      <dd>Set the output type to <em>type</em>. Permissible values are <code>png</code> for PNGs, <code>ps</code> for PostScript, and <code>svg</code> for SVG.</dd>
+</dl>
+
+<h3>Grid Options</h3>
+<p>Not all of hex width, hex height, hex side, image width, image height, rows, and columns need be given in order to draw a grid. A grid will be drawn so long as enough of these are specified so that the ones omitted may be calculated.</p>
+<dl>
+   <dt><b>--hex-width</b>=<em>length</em></dt>
+      <dd>Set the width of hexes to <em>length</em>.</dd>
+   <dt><b>--hex-height</b>=<em>length</em></dt>
+      <dd>Set the height of hexes to <em>length</em>.</dd>
+   <dt><b>--hex-side</b>=<em>length</em></dt>
+      <dd>Set the length of hex sides to <em>length</em>.</dd>
+   <dt><b>--image-width</b>=<em>length</em></dt>
+      <dd>Set the width of the image to <em>length</em>.</dd>
+   <dt><b>--image-height</b>=<em>length</em></dt>
+      <dd>Set the height of the image to <em>length</em>.</dd>
+   <dt><b>--image-margin</b>=<em>m</em></dt>
+   <dt><b>--image-margin</b>=<em>t,r,b,l</em></dt>
+      <dd>The first form sets all four margins to <em>m</em>. The second form proceeds clockwise to set the top, right, bottom, and left margins individually to <em>t</em>, <em>r</em>, <em>b</em>, and <em>l</em>, respectively.</dd>
+   <dt><b>--centered</b></dt>
+      <dd>Center grid with respect to the image boundaries less the image margins. Useful when rows and columns are calculated rather than specified.</dd>
+   <dt><b>--rows</b>=<em>n</em></dt>
+      <dd>Draw <em>n</em> rows of hexes. <em>n</em> must be a positive integer.</dd>
+   <dt><b>--columns</b>=<em>n</em></dt>
+      <dd>Draw <em>n</em> columns of hexes. <em>n</em> must be a positive integer.</dd>
+   <dt><b>--grid-color</b>=<em>color</em></dt>
+      <dd>Set the color of the grid lines. Default is 50% grey: <code>808080</code> for PNG and SVG output, <code>0.5,0.5,0.5</code> for PostScript output.</dd>
+   <dt><b>--grid-opacity</b>=<em>opacity</em></dt>
+      <dd>Set the opacity of the grid lines. Defaults to fully opaque: 0 for PNG output, 1 for SVG output, and is ignored for PostScript output.</dd>
+   <dt><b>--grid-thickness</b>=<em>size</em></dt>
+      <dd>Set the thickness of the grid lines to <em>size</em>. Defaults to 1px for PNG and SVG output, and 1pt for PostScript. This option is ignored for antialiased PNG output, due to limitations of the GD drawing library.</dd>
+   <dt><b>--grid-grain</b>=<em>grain</em></dt>
+      <dd>Set the grain of the hex grid. Permissible values are <code>h</code> for horizontal and <code>v</code> for vertical. With horizontal grain, the rows are straight and the columns wavy; vertical grain is the opposite, and is the default.</dd>
+   <dt><b>--grid-start</b>=<em>start</em></dt>
+      <dd>If the grain is vertical, set whether the first column starts in or out. If the grain is horizontal, set whether the first row starts in or out. Permissible values are <code>i</code> for in, or <code>o</code> for out. Which column or row is the first is fixed by the coordinate origin.</dd>
+</dl>
+
+<h3>Coordinate Options</h3>
+<p>These options affect the appearance and placement of coordinates within hexes.</p>
+<dl>
+   <dt><b>--coord-color</b>=<em>color</em></dt>
+      <dd>Set the color of the hex coordinates. Default is 50% grey: <code>808080</code> for PNG and SVG output, <code>0.5,0.5,0.5</code> for PostScript output.</dd>
+   <dt><b>--coord-opacity</b>=<em>opacity</em></dt>
+      <dd>Set the opacity of the hex coordinates. Defaults to fully opaque: 0 for PNG output, 1 for SVG output, and is ignored for PostScript output.</dd>
+   <dt><b>--coord-format</b>=<em>format</em></dt>
+      <dd>Set the format of the hex coordinates. The format string syntax is similar to that used by the <code>printf()</code> function in C. The following special markers cause values to be substituted into the format string where they appear:
+         <dl>
+            <dt><b>%c</b></dt>
+               <dd>Prints the hex column as a number.</dd>
+            <dt><b>%r</b></dt>
+               <dd>Prints the hex row as a number.</dd>
+            <dt><b>%C</b></dt>
+               <dd>Prints the hex column as a capital letter.</dd>
+            <dt><b>%R</b></dt>
+               <dd>Prints the hex row as a capital letter.</dd>
+         </dl>
+The field width can be specified for numeric types by inserting a number between the <code>%</code> and the format letter; numeric types can be zero-padded by prepending a <code>0</code> to the field width. The alphabetic formats count <code>AB</code> as the successor of <code>AA</code> by default; tally-like counting where <code>BB</code> is the successor of <code>AA</code> can be specified by inserting a <code>t</code> before the format letter. A percent sign may be specified by <code>%%</code>. The default format is <code>%02c%02r</code>. Coordinates may be disabled by giving an empty string (<code>""</code>) as the format.</dd>
+   <dt><b>--coord-font</b>=<em>font</em></dt>
+      <dd>Set the font for coordinate text.</dd>
+   <dt><b>--coord-size</b>=<em>size</em></dt>
+      <dd>Set the size, in points, of the coordinate text. Defaults to 8px for SVG, 8pt for PNG and PostScript. This is the only length or size which is measured in points for PNG output.</dd>
+   <dt><b>--coord-bearing</b>=<em>theta</em></dt>
+      <dd>Place coordinates at <em>theta</em> degrees counterclockwise from the hex center. The default bearing is 90 degrees, vertically above the hex center.</dd>
+   <dt><b>--coord-distance</b>=<em>length</em></dt>
+      <dd>Place coordinated <em>length</em> away from the hex center. Defaults to 0.</dd>
+   <dt><b>--coord-tilt</b>=<em>theta</em></dt>
+      <dd>Tilt coordinates at <em>theta</em> degrees counterclockwise from the horizontal. The default tilt is 0 degrees, which yields horizontal text.</dd>
+   <dt><b>--coord-column-skip</b>=<em>n</em></dt>
+      <dd>Print coordinates only for columns divisible by <em>n</em>. The default is 1, which prints coordinates for all columns.</dd>
+   <dt><b>--coord-row-skip</b>=<em>n</em></dt>
+      <dd>Print coordinates only for rows divisible by <em>n</em>. The default is 1, which prints coordinates for all rows.</dd>
+   <dt><b>--coord-column-start</b>=<em>n</em></dt>
+      <dd>Number columns starting from <em>n</em>. The default is 1.</dd>
+   <dt><b>--coord-row-start</b>=<em>n</em></dt>
+      <dd>Number rows starting from <em>n</em>. The default is 1.</dd>
+   <dt><b>--coord-origin</b>=<em>corner</em></dt>
+      <dd>Set location of coordinate origin. Permissible locations are <code>ul</code> for upper left, <code>ur</code> for upper right, <code>ll</code> for lower left, and <code>lr</code> for lower right. Upper left is the default.</dd>
+</dl>
+
+<h3>Hex Center Options</h3>
+<dl>
+   <dt><b>--center-style</b>=<em>style</em></dt>
+      <dd>Set style of hex centers to <em>style</em>. Permissible styles are <code>n</code> for none, <code>d</code> for dots, and <code>c</code> for crosses.</dd>
+   <dt><b>--center-color</b>=<em>color</em></dt>
+      <dd>Set the color of hex centers. Default is 50% grey: <code>808080</code> for PNG and SVG output, <code>0.5,0.5,0.5</code> for PostScript output.</dd>
+   <dt><b>--center-opacity</b>=<em>opacity</em></dt>
+      <dd>Set the opacity of hex centers. Defaults to fully opaque: 0 for PNG output, 1 for SVG output, and is ignored for PostScript output.</dd>
+   <dt><b>--center-size</b>=<em>size</em></dt>
+      <dd>Set the size of hex centers to <em>size</em>. Defaults to 3px for PNG and SVG, 3pt for PostScript. Center size must be an integer for PNG output.</dd>
+</dl>
+
+<h3>Background Options</h3>
+<dl>
+   <dt><b>--bg-color</b>=<em>color</em></dt>
+      <dd>Set the background color. Defaults to <code>FFFFFF</code> for PNG output, and to none for SVG and PostScript output.</dd>
+   <dt><b>--bg-opacity</b>=<em>opacity</em></dt>
+      <dd>Set the background opacity. Default is fully opaque: 0 for PNG output, 1 for SVG output, and is ignored for PostScript output.</dd>
+   <dt><b>--matte</b></dt>
+      <dd>Prevent the background from extending into the image margins.</dd>
+</dl>
+
+<h3>Miscellaneous Options</h3>
+<dl>
+   <dt><b>--</b></dt>
+      <dd>Terminates the list of options. Arguments which appear after a <code>--</code> will not be interpreted as options. This is useful if you want to read a specfile the name of which begins with two dashes.</dd>
+   <dt><b>--help</b></dt>
+      <dd>Display help and exit.</dd>
+   <dt><b>--version</b></dt>
+      <dd>Display version information and exit.</dd>
+</dl>
+
+<h3>Specfile Syntax</h3>
+<p>Due to the large number of options which may be necessary to generate a single hex grid, users may also specify hex grid parameters in a specfile which can be read from standard input or named as the first non-option argument on the command line. A specfile contains <code>=</code>-separated option/value pairs, one pair per line. Comments may be preceded by a <code>#</code>, either following an option/value pair or on lines by themselves. Values containing spaces must be double-quoted. Double quotation marks may be included in quoted values by preceding them with a backslash. Options which require no value on the command line must be given a dummy value in a specfile. Options given on the command line override options given in a specfile.</p>
+
+<p>Example:</p>
+<pre>
+# specfile example
+output = png
+hex-side = 30     # this is an end-of-line comment
+coord-format = "%C\" %02r"
+antialias = true  # 'true' is a dummy value 
+</pre>
+<p>Here, the coordinate format will produce coordinates like <code>A" 01</code>, which isn't something anyone is likely to want, but it illustrates how to include spaces and quotation marks in a quoted value.</p>
+
+<h2>EXAMPLES</h2>
+<dl>
+<dt>Fill a 22"x34" sheet with 0.5" hexes, horizontal grain:</dt>
+   <dd><code>mkhexgrid --output=ps --image-width=34in --image-height=22in --hex-side=0.5in --coord-bearing=0 --coord-dist=0.3in --coord-size=8 --grid-thickness=1 --coord-font=Helvetica --grid-grain=h --grid-start=o --coord-tilt=-90 --centered -o test.ps</code></dd>
+</dl>
+
+<h2>AVAILABILITY</h2>
+<p>mkhexgrid is available from
+<blockquote><a href="http://www.nomic.net/~uckelman/mkhexgrid">http://www.nomic.net/~uckelman/mkhexgrid</a></blockquote>
+New releases of mkhexgrid are announced on the
+<blockquote><a href="mailto:mkhexgrid-announce@nomic.net">mkhexgrid-announce@nomic.net</a></blockquote>
+mailing list. To join, send a message to
+<blockquote><a href="mkhexgrid-announce-request@nomic.net">mkhexgrid-announce-request@nomic.net</a></blockquote>
+with the word <code>subscribe</code> in the message body.</p>
+
+<h2>AUTHOR</h2>
+<p>Written by Joel Uckelman &lt;<a href="mailto:uckelman@nomic.net">uckelman@nomic.net</a>&gt;.</p>
+
+<h2>BUGS</h2>
+<p>Please report bugs to &lt;<a href="mailto:mkhexgrid-bugs@nomic.net">mkhexgrid-bugs@nomic.net</a>&gt;.</p>
+
+<h2>COPYRIGHT</h2>
+<p>Copyright &copy; 2006, 2007 Joel Uckelman.</p>
+<p>This is free software. You may redistribute copies of it under the terms of the <a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a>. There is NO WARRANTY, to the extent permitted by law.</p>
+
+</body>
+</html>
