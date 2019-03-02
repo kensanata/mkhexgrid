@@ -148,7 +148,7 @@ int main(int argc, char **argv)
       Grid g(opt);
       g.draw();
    }
-   catch (exception &e) {
+   catch (std::exception &e) {
       cerr << argv[0] << ": " << e.what() << endl;
       exit(1);
    }

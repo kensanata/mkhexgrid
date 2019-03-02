@@ -24,6 +24,7 @@
 #include <exception>
 #include <stdexcept>
 #include <string>
+#include <cstring>
 #include <sstream>
 using namespace std;
 
