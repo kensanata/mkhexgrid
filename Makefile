@@ -10,7 +10,7 @@ RPMDIR=/home/uckelman/rpmbuild
 
 CC=g++
 CPPFLAGS=-c -g -O2 -W -Wall -DVERSION='"$(VERSION)"'
-LDFLAGS=-lm -lstdc++ -lgd
+LDLIBS=-lm -lstdc++ -lgd
 
 FILES=grid.h \
       grid.cpp \
