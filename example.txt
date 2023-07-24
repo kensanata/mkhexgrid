@@ -1,0 +1,11 @@
+output=svg
+outfile=hex-layer.svg
+hex-side=45px
+rows=17
+columns=14
+grid-color=7a7a7a
+coord-color=008080
+coord-size=10px
+coord-distance=28px
+coord-column-start=37
+coord-row-start=01
